@@ -107,7 +107,7 @@ def main():
     global game_speed, x_pos_bg, y_pos_bg, points, kirby, obstacles
     clock = pygame.time.Clock()
     points = 0
-    font = pygame.font.Font('freesansbold.ttf', 20)
+
     kirby = [Kirby()]
     obstacles = []
     cloud = Cloud()
@@ -120,7 +120,7 @@ def main():
         points += 1
         if points % 100 == 0:
             game_speed += 1
-
+        font = pygame.font.Font('freesansbold.ttf', 20)
         text = font.render("Points: " + str(points), True, (0, 0, 0))
         textRect = text.get_rect()
         textRect.center = (1000, 40)
@@ -164,7 +164,7 @@ def main():
         cloud.update()
         score()
         for i, k in enumerate(kirby):
-            if user_input[pygame.K_SPACE] and not (k.rect.y < 200):
+            if user_input[pygame.K_SPACE] and k.rect.y == 310:
                 k.kirby_jump = True
                 k.kirby_run = False
             if k.Y_POS < 0:
