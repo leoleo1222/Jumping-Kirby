@@ -114,6 +114,7 @@ def main():
     x_pos_bg = 0
     y_pos_bg = 380
     game_speed = 14
+    death_count = 0
     def score():
         global points, game_speed
         points += 1
@@ -152,9 +153,11 @@ def main():
         for obstacle in obstacles:
             obstacle.draw(win)
             obstacle.update()
-            #for i, k in enumerate(kirby):
-                #if k.rect .colliderect(obstacle.rect):
-                    #remove(i)
+            for i, k in enumerate(kirby):
+                if k.rect .colliderect(obstacle.rect):
+                    pygame.time.delay(500)
+                    death_count += 1
+                    menu(death_count)
         user_input = pygame.key.get_pressed()
         background()
         cloud.draw(win)
@@ -172,5 +175,31 @@ def main():
         pygame.display.update()
 
 
+def menu(death_count):
+    global points
+    run = True
+    while run:
+        win.fill((142, 142, 142))
+        font = pygame.font.Font('freesansbold.ttf', 30)
 
-main()
+        if death_count == 0:
+            text = font.render("Press any Key to Start", True, (0, 0, 0))
+        elif death_count > 0:
+            text = font.render("Press any Key to Restart", True, (0, 0, 0))
+            score = font.render("Your Score: " + str(points), True, (0, 0, 0))
+            scoreRect = score.get_rect()
+            scoreRect.center = (game_width // 2, game_height // 2 + 50)
+            win.blit(score, scoreRect)
+        textRect = text.get_rect()
+        textRect.center = (game_width // 2, game_height // 2)
+        win.blit(text, textRect)
+        win.blit(kirby_run[0], (game_width // 2 - 20, game_height // 2 - 140))
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.KEYDOWN:
+                main()
+
+
+menu(death_count=0)
