@@ -5,8 +5,8 @@ import sys
 pygame.init()
 
 
-game_width = 1100
-game_height = 600
+game_width = 1280
+game_height = 720
 
 pygame.init()
 win = pygame.display.set_mode((game_width, game_height))
@@ -16,18 +16,19 @@ look_right = pygame.image.load(os.path.join("kirby_right.png"))
 kirby_jump = pygame.image.load(os.path.join("Kriby_jump.png"))
 cloud = pygame.image.load(os.path.join("kirby_cloud.png"))
 BG = pygame.image.load(os.path.join("Mario_track.png"))
-kirby_enemy = [pygame.image.load(os.path.join("Kirby_enemy1.png")),pygame.image.load(os.path.join("kriby_enemy2.png            "))]
-kirby_run = [None]*10
-for picIndex in range(1,9):
-    kirby_run[picIndex-1] = pygame.image.load(os.path.join("Kriby_right", "R" + str(picIndex) + ".png"))
-    picIndex+=1
+kirby_enemy = [pygame.image.load(os.path.join("Kirby_enemy1.png")), pygame.image.load(os.path.join("kriby_enemy2.png            "))]
+kirby_run = [None] * 10
+for picIndex in range(1, 9):
+    kirby_run[picIndex - 1] = pygame.image.load(os.path.join("Kriby_right", "R" + str(picIndex) + ".png"))
+    picIndex += 1
+
 
 class Kirby:
     X_POS = 80
     Y_POS = 310
     JUMP_VEL = 10
 
-    def __init__(self, img= look_right):
+    def __init__(self, img=look_right):
         self.image = img
         self.kirby_run = True
         self.kirby_jump = False
@@ -44,7 +45,6 @@ class Kirby:
         if self.step_index >= 9:
             self.step_index = 0
 
-
     def jump(self):
         self.image = kirby_jump
         if self.kirby_jump:
@@ -56,13 +56,14 @@ class Kirby:
             self.jump_vel = self.JUMP_VEL
 
     def run(self):
-        self.image = kirby_run[self.step_index//3]
+        self.image = kirby_run[self.step_index // 3]
         self.rect.x = self.X_POS
         self.rect.y = self.Y_POS
         self.step_index += 1
 
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.rect.x, self.rect.y))
+
 
 class Obstacle:
     def __init__(self, image, number_of_enemy):
@@ -79,29 +80,33 @@ class Obstacle:
     def draw(self, win):
         win.blit(self.image[self.type], self.rect)
 
+
 class Enemy(Obstacle):
     def __init__(self, image, number_of_enemy):
         super().__init__(image, number_of_enemy)
         self.rect.y = 300
 
+
 def remove(index):
     kirby.pop(index)
 
+
 class Cloud:
     def __init__(self):
-        self.x = game_width + random.randint(800,1000)
-        self.y = random.randint(50,100)
+        self.x = game_width + random.randint(800, 1000)
+        self.y = random.randint(50, 100)
         self.image = cloud
         self.width = self.image.get_width()
 
     def update(self):
         self.x -= game_speed
         if self.x < -self.width:
-            self.x = game_width + random.randint(2500,3000)
-            self.y = random.randint(50,100)
+            self.x = game_width + random.randint(2500, 3000)
+            self.y = random.randint(50, 100)
 
     def draw(self, win):
         win.blit(self.image, (self.x, self.y))
+
 
 def main():
     global game_speed, x_pos_bg, y_pos_bg, points, kirby, obstacles
@@ -115,6 +120,7 @@ def main():
     y_pos_bg = 380
     game_speed = 14
     death_count = 0
+
     def score():
         global points, game_speed
         points += 1
@@ -142,14 +148,14 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-        win.fill((142,142,142))
+        win.fill((142, 142, 142))
         for i in kirby:
             i.update()
             i.draw(win)
         if len(kirby) == 0:
             break
         if len(obstacles) == 0:
-            obstacles.append(Enemy(kirby_enemy, random.randint(0,1)))
+            obstacles.append(Enemy(kirby_enemy, random.randint(0, 1)))
         for obstacle in obstacles:
             obstacle.draw(win)
             obstacle.update()
